@@ -1,9 +1,13 @@
 import { useState } from "react";
-import { ArrowUpRight, ArrowUp, RefreshCw } from "lucide-react";
-import { getRandomSuggestions, Suggestion } from "@/lib/suggestions";
+import { ArrowUp, RefreshCw } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { TattooStyles } from "@/components/Tattoo Styles/tattoo_styles";
+import { TattooColors } from "@/components/Tattoo Colors/tattoo_colors";
+import { TattooAspectRatio } from "@/components/Tattoo Aspect Ratio/tattoo_aspect_ratio";
+import { TattooPlacements } from "@/components/Tattoo Placements/tattoo_placements";
+import { TattooMoods } from "@/components/Tattoo Moods/tattoo_moods";
 
 type QualityMode = "performance" | "quality";
 
@@ -14,34 +18,19 @@ interface PromptInputProps {
   onToggleProviders: () => void;
   mode: QualityMode;
   onModeChange: (mode: QualityMode) => void;
-  suggestions: Suggestion[];
 }
 
 export function PromptInput({
-  suggestions: initSuggestions,
   isLoading,
   onSubmit,
 }: PromptInputProps) {
   const [input, setInput] = useState("");
-  const [suggestions, setSuggestions] = useState<Suggestion[]>(initSuggestions);
-
-  const updateSuggestions = () => {
-    setSuggestions(getRandomSuggestions());
-  };
-  const handleSuggestionSelect = (prompt: string) => {
-    setInput(prompt);
-    onSubmit(prompt);
-  };
 
   const handleSubmit = () => {
     if (!isLoading && input.trim()) {
       onSubmit(input);
     }
   };
-
-  // const handleRefreshSuggestions = () => {
-  //   setCurrentSuggestions(getRandomSuggestions());
-  // };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -51,6 +40,7 @@ export function PromptInput({
       }
     }
   };
+
 
   return (
     <div className="w-full mb-8">
@@ -66,33 +56,19 @@ export function PromptInput({
           />
           <div className="flex items-center justify-between pt-1">
             <div className="flex items-center justify-between space-x-2">
-              <button
-                onClick={updateSuggestions}
-                className="flex items-center justify-between px-2 rounded-lg py-1 bg-background text-sm hover:opacity-70 group transition-opacity duration-200"
+              <Button
+                onClick={() => {}}
+                variant="default"
+                size="default"
+                className="rounded-full"
               >
-                <RefreshCw className="w-4 h-4 text-zinc-500 group-hover:opacity-70" />
-              </button>
-              {suggestions.map((suggestion, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleSuggestionSelect(suggestion.prompt)}
-                  className={cn(
-                    "flex items-center justify-between px-2 rounded-lg py-1 bg-background text-sm hover:opacity-70 group transition-opacity duration-200",
-                    index > 2
-                      ? "hidden md:flex"
-                      : index > 1
-                        ? "hidden sm:flex"
-                        : "",
-                  )}
-                >
-                  <span>
-                    <span className="text-black text-xs sm:text-sm">
-                      {suggestion.text.toLowerCase()}
-                    </span>
-                  </span>
-                  <ArrowUpRight className="ml-1 h-2 w-2 sm:h-3 sm:w-3 text-zinc-500 group-hover:opacity-70" />
-                </button>
-              ))}
+                <RefreshCw className="w-4 h-4" />
+              </Button>
+              <TattooStyles />
+              <TattooColors />
+              <TattooAspectRatio />
+              <TattooPlacements />
+              <TattooMoods />
             </div>
             <button
               onClick={handleSubmit}
